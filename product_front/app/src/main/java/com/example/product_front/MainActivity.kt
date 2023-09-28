@@ -14,6 +14,7 @@ import com.example.product_front.ui.theme.Product_frontTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.product_front.ScanScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,27 +60,6 @@ fun MainScreen(onScanButtonClicked: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = onScanButtonClicked) {
                 Text(text = "Scan")
-            }
-        }
-    }
-}
-
-@Composable
-fun ScanScreen() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // NOTE: You will need to integrate a real camera view and permissions
-            Text(text = "Camera View Placeholder")
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { /* Implement the photo capture functionality */ }) {
-                Text(text = "Capture")
             }
         }
     }
