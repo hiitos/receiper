@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 
 
 @Composable
@@ -31,6 +33,32 @@ fun ScanScreen() {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { /* Implement the photo capture functionality */ }) {
                 Text(text = "Capture")
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun FeatureThatRequiresCameraPermission() {
+
+    // Camera permission state
+    val cameraPermissionState = rememberPermissionState(
+        android.Manifest.permission.CAMERA
+    )
+
+    if (cameraPermissionState.status.isGranted) {
+        Text("Camera permission Granted")
+    } else {
+        Column {
+            val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
+                  "カメラ機能がこのアプリには必要です。許可を与えてください。"
+            } else {
+                "アプリのインストールをしていただいてありがとうございます。カメラへの権限許可を与えていただきますようにお願いします。"
+            }
+            Text(textToShow)
+            Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+                Text("許可を与える")
             }
         }
     }
