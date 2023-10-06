@@ -47,11 +47,11 @@ private fun FeatureThatRequiresCameraPermission() {
         android.Manifest.permission.CAMERA
     )
 
-    if (cameraPermissionState.status.isGranted) {
+    if (cameraPermissionState.hasPermission) {
         Text("Camera permission Granted")
     } else {
         Column {
-            val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
+            val textToShow = if (cameraPermissionState.shouldShowRationale) {
                   "カメラ機能がこのアプリには必要です。許可を与えてください。"
             } else {
                 "アプリのインストールをしていただいてありがとうございます。カメラへの権限許可を与えていただきますようにお願いします。"
