@@ -28,6 +28,7 @@ fun ScanScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            FeatureThatRequiresCameraPermission()
             // NOTE: You will need to integrate a real camera view and permissions
             Text(text = "Camera View Placeholder")
             Spacer(modifier = Modifier.height(16.dp))
