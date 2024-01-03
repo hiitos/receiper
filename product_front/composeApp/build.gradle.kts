@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.multiplatformSettings)
             implementation(libs.koin.core)
+            implementation(libs.date.time)
         }
 
         commonTest.dependencies {
