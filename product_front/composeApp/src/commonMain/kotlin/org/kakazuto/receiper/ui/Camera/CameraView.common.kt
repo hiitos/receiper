@@ -6,9 +6,7 @@ import org.kakazuto.receiper.model.PictureData
 import org.kakazuto.receiper.utils.PlatformStorableImage
 
 @Composable
-actual fun CameraView(
+expect fun CameraView(
     modifier: Modifier,
     onCapture: (picture: PictureData.Camera, image: PlatformStorableImage) -> Unit
-) {
-
-}
+)

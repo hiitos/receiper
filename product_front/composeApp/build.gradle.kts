@@ -43,7 +43,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(compose.runtime)
-            implementation(compose.material3)
+            implementation(compose.material)
             implementation(compose.materialIconsExtended)
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.multiplatformSettings)
             implementation(libs.koin.core)
             implementation(libs.date.time)
+            implementation(libs.components.resources)
         }
 
         commonTest.dependencies {
@@ -63,11 +64,18 @@ kotlin {
         }
 
         androidMain.dependencies {
+            api(libs.androidx.core)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.activityCompose)
             implementation(libs.compose.uitooling)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.camera.camera2)
+            implementation(libs.camera.lifecycle)
+            implementation(libs.camera.view)
+            implementation(libs.accompanist.permissions)
+            implementation(libs.gms.maps)
+            implementation(libs.gms.location)
         }
 
         jvmMain.dependencies {
