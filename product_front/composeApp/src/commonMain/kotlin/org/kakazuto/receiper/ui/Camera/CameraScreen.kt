@@ -9,6 +9,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.kakazuto.receiper.di.getScreenModel
+import org.kakazuto.receiper.ui.Recipe.RecipeScreen
 
 class CameraScreen(): Screen {
     @Composable
@@ -19,9 +20,9 @@ class CameraScreen(): Screen {
         Text(text = "Camera Screen is Displayed")
         CameraView(
             modifier = Modifier.fillMaxSize(),
-            onCapture = { picture, image ->
-//                scrennModel.onCapture(picture, image)
-                navigator.pop()
+            onCapture = { image ->
+//                scrennModel.onCapture(image)
+                navigator.push(RecipeScreen())
             })
     }
 }
