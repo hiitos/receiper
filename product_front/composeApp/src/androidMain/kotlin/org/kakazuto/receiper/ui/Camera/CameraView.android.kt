@@ -41,6 +41,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.readResourceBytes
 import org.kakazuto.receiper.model.PictureData
 import org.kakazuto.receiper.ui.Common.Composable.CircularButton
+import org.kakazuto.receiper.utils.AndroidStorableImage
 import org.kakazuto.receiper.utils.PlatformStorableImage
 import java.nio.ByteBuffer
 import java.util.*
@@ -55,7 +56,7 @@ private val executor = Executors.newSingleThreadExecutor()
 @Composable
 actual fun CameraView(
     modifier: Modifier,
-    onCapture: (picture: PictureData.Camera, image: PlatformStorableImage) -> Unit
+    onCapture: (image: PlatformStorableImage) -> Unit
 ) {
     val cameraPermissionState = rememberMultiplePermissionsState(
         listOf(
@@ -78,7 +79,7 @@ actual fun CameraView(
 @Composable
 private fun CameraWithGrantedPermission(
     modifier: Modifier,
-    onCapture: (picture: PictureData.Camera, image: PlatformStorableImage) -> Unit
+    onCapture: (image: PlatformStorableImage) -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -141,14 +142,9 @@ private fun CameraWithGrantedPermission(
         ) {
             fun addLocationInfoAndReturnResult(imageBitmap: ImageBitmap) {
                 fun sendToStorage() {
-//                    onCapture(
-//                        createCameraPictureData(
-//                            name = nameAndDescription.name,
-//                            description = nameAndDescription.description,
-//                            gps = gpsPosition
-//                        ),
-//                        AndroidStorableImage(imageBitmap)
-//                    )
+                    onCapture(
+                        AndroidStorableImage(imageBitmap)
+                    )
                     capturePhotoStarted = false
                 }
                 LocationServices.getFusedLocationProviderClient(context)

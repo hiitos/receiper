@@ -3,7 +3,6 @@ package org.kakazuto.receiper.ui.Camera
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,17 +15,16 @@ import androidx.compose.ui.unit.dp
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCAction
-import kotlinx.cinterop.useContents
 import org.jetbrains.skia.Image
 import org.kakazuto.receiper.model.PictureData
 import org.kakazuto.receiper.ui.Common.Composable.CircularButton
 import org.kakazuto.receiper.ui.Common.Icon.IconCustomArrowBack
+import org.kakazuto.receiper.utils.IosStorableImage
 import org.kakazuto.receiper.utils.PlatformStorableImage
 import platform.AVFoundation.*
 import platform.AVFoundation.AVCaptureDeviceDiscoverySession.Companion.discoverySessionWithDeviceTypes
 import platform.AVFoundation.AVCaptureDeviceInput.Companion.deviceInputWithDevice
 import platform.CoreGraphics.CGRect
-import platform.CoreLocation.CLLocation
 import platform.CoreLocation.CLLocationManager
 import platform.CoreLocation.kCLLocationAccuracyBest
 import platform.Foundation.NSError
@@ -58,7 +56,7 @@ private val deviceTypes = listOf(
 @Composable
 actual fun CameraView(
     modifier: Modifier,
-    onCapture: (picture: PictureData.Camera, image: PlatformStorableImage) -> Unit
+    onCapture: (image: PlatformStorableImage) -> Unit
 ) {
     var cameraAccess: CameraAccess by remember { mutableStateOf(CameraAccess.Undefined) }
     LaunchedEffect(Unit) {
@@ -102,7 +100,7 @@ actual fun CameraView(
 
 @Composable
 private fun BoxScope.AuthorizedCamera(
-    onCapture: (picture: PictureData.Camera, image: PlatformStorableImage) -> Unit
+    onCapture: (image: PlatformStorableImage) -> Unit
 ) {
     val camera: AVCaptureDevice? = remember {
         discoverySessionWithDeviceTypes(
@@ -127,7 +125,7 @@ private fun BoxScope.AuthorizedCamera(
 @Composable
 private fun BoxScope.RealDeviceCamera(
     camera: AVCaptureDevice,
-    onCapture: (picture: PictureData.Camera, image: PlatformStorableImage) -> Unit
+    onCapture: (image: PlatformStorableImage) -> Unit
 ) {
     val capturePhotoOutput = remember { AVCapturePhotoOutput() }
     var actualOrientation by remember {
@@ -152,9 +150,9 @@ private fun BoxScope.RealDeviceCamera(
                 val photoData = didFinishProcessingPhoto.fileDataRepresentation()
                 if (photoData != null) {
                     val uiImage = UIImage(photoData)
-//                    onCapture(
-////                         todo: not implemented
-//                    )
+                    onCapture(
+                        IosStorableImage(uiImage)
+                    )
                 }
                 capturePhotoStarted = false
             }

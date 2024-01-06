@@ -9,7 +9,7 @@ import org.kakazuto.receiper.utils.PlatformStorableImage
 @Composable
 expect fun CameraView(
     modifier: Modifier,
-    onCapture: (picture: PictureData.Camera, image: PlatformStorableImage) -> Unit,
+    onCapture: (image: PlatformStorableImage) -> Unit,
 )
 
 expect fun ByteArray.toImageBitmap(): ImageBitmap
