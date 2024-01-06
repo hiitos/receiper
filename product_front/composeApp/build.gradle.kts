@@ -17,12 +17,6 @@ kotlin {
         }
     }
 
-    jvm()
-
-    js {
-        browser()
-        binaries.executable()
-    }
 
     listOf(
         iosX64(),
@@ -56,6 +50,7 @@ kotlin {
             implementation(libs.multiplatformSettings)
             implementation(libs.koin.core)
             implementation(libs.date.time)
+            implementation(libs.components.resources)
         }
 
         commonTest.dependencies {
@@ -63,21 +58,19 @@ kotlin {
         }
 
         androidMain.dependencies {
+            api(libs.androidx.core)
             implementation(libs.androidx.appcompat)
             implementation(libs.androidx.activityCompose)
             implementation(libs.compose.uitooling)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
-        }
+            implementation(libs.camera.camera2)
+            implementation(libs.camera.lifecycle)
+            implementation(libs.camera.view)
+            implementation(libs.accompanist.permissions)
+            implementation(libs.gms.maps)
+            implementation(libs.gms.location)
 
-        jvmMain.dependencies {
-            implementation(compose.desktop.common)
-            implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.okhttp)
-        }
-
-        jsMain.dependencies {
-            implementation(compose.html.core)
         }
 
         iosMain.dependencies {
@@ -114,6 +107,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"
     }
+}
+dependencies {
+    implementation(libs.androidx.material3)
 }
 
 compose.desktop {

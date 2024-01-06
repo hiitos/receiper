@@ -1,5 +1,6 @@
 [versions]
 
+androidx-core = "1.10.1"
 kotlin = "1.9.21"
 compose = "1.5.11"
 agp = "8.2.0"
@@ -16,9 +17,15 @@ kotlinx-serialization = "1.6.2"
 multiplatformSettings = "1.1.1"
 koin = "3.5.3"
 date-time = "0.4.0"
+material3 = "1.1.2"
+camera = "1.2.3"
+accompaniest-permissions = "0.29.2-rc"
+maps = "18.1.0"
+location = "21.0.1"
+resources = "1.6.0-dev1275"
 
 [libraries]
-
+androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
@@ -34,6 +41,14 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 multiplatformSettings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 date-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "date-time" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+camera-camera2 = { module = "androidx.camera:camera-camera2" , version.ref = "camera"}
+camera-lifecycle = { module = "androidx.camera:camera-lifecycle" , version.ref = "camera"}
+camera-view = { module = "androidx.camera:camera-view" , version.ref = "camera"}
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompaniest-permissions" }
+gms-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "maps" }
+gms-location = { module = "com.google.android.gms:play-services-location", version.ref = "location" }
+components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "resources" }
 
 [plugins]
 
