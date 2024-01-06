@@ -51,6 +51,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.date.time)
             implementation(libs.components.resources)
+            implementation("com.russhwolf:multiplatform-settings-no-arg:1.1.1")
         }
 
         commonTest.dependencies {
