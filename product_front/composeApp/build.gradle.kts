@@ -68,6 +68,9 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.date.time)
             implementation(libs.components.resources)
+            implementation("io.github.jan-tennert.supabase:postgrest-kt:1.4.7")
+            implementation("io.github.jan-tennert.supabase:realtime-kt:1.4.7")
+            implementation("io.github.jan-tennert.supabase:gotrue-kt:1.4.7")
             implementation("com.russhwolf:multiplatform-settings-no-arg:1.1.1")
         }
 
