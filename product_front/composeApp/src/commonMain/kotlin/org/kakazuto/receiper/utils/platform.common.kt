@@ -1,8 +1,6 @@
 package org.kakazuto.receiper.utils
 
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.russhwolf.settings.Settings
-import io.github.irgaly.kottage.KottageEnvironment
 import kotlinx.coroutines.CoroutineDispatcher
 
 expect class PlatformStorableImage

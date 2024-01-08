@@ -6,15 +6,12 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
 sealed interface PictureData {
-    val name: String
-    val description: String
+    val userId: String
     val dateString: String
 
     data class Resource(
         val resource: String,
-        val thumbnailResource: String,
-        override val name: String,
-        override val description: String,
+        override val userId: String,
         override val dateString: String,
     ) : PictureData
 
@@ -22,8 +19,7 @@ sealed interface PictureData {
     data class Camera(
         val id: String,
         val timeStampSeconds: Long,
-        override val name: String,
-        override val description: String,
+        override val userId: String,
     ) : PictureData {
         override val dateString: String
             get(): String {
