@@ -5,7 +5,7 @@ import io.github.jan.supabase.postgrest.postgrest
 import org.kakazuto.receiper.model.Recipe
 
 interface RecipeApi {
-    suspend fun fetchTheLatest(): Recipe
+    suspend fun fetchTheLatest(userId: Int): Recipe
 }
 
 internal class RecipeApiImpl(
@@ -13,8 +13,11 @@ internal class RecipeApiImpl(
 ): RecipeApi {
     private val table = client.postgrest["recipe"]
 
-    override suspend fun fetchTheLatest(): Recipe {
-        // get the latest 1 reciepe
-        return table.select().decodeSingle()
+    override suspend fun fetchTheLatest(userId: Int): Recipe {
+        // filter my recipe
+        val yourRecipe = table.select{eq("user_id", userId)}.decodeList<Recipe>()
+        // get the latest one
+        val yourFirstrecipe = yourRecipe.first()
+        return yourFirstrecipe
     }
 }

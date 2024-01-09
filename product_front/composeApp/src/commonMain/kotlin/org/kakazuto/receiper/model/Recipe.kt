@@ -12,5 +12,7 @@ data class Recipe(
     @SerialName("description")
     val description: String,
     @SerialName("created_at")
-    val createdAt: String
+    val createdAt: String,
+    @SerialName("user_id")
+    val userId: Int,
 )
