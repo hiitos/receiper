@@ -32,6 +32,10 @@ val viewModel = module {
     }
     // LoginScreenModelのインスタンスを生成するためのファクトリを定義
     factory {
-        RecipeScreenModel(get(),get())
+        RecipeScreenModel(get(),get(),get())
     }
+
+//    factory {
+//        ReceiptScreenModel(get())
+//    }
 }
