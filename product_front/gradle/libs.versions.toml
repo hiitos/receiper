@@ -23,6 +23,7 @@ accompaniest-permissions = "0.29.2-rc"
 maps = "18.1.0"
 location = "21.0.1"
 resources = "1.6.0-dev1275"
+konfig = "0.15.1"
 
 [libraries]
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
@@ -57,3 +58,4 @@ compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+konfig = { id = "com.codingfeline.buildkonfig", version.ref = "konfig" }

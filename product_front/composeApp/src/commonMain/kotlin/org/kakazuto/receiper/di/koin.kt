@@ -7,7 +7,7 @@ fun initKoin(additionalConfiguration: KoinApplication.() -> Unit = {}) {
     // koinが初期化されていなかったら初期化する処理
     if (KoinPlatformTools.defaultContext().getOrNull() == null) {
         KoinPlatformTools.defaultContext().startKoin {
-            modules(viewModel)
+            modules(viewModel, netModule, supabaseModule)
         }
     } else {
         // koinが初期化されていたら何もしない
