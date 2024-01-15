@@ -11,7 +11,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.kakazuto.receiper.di.getScreenModel
 import org.kakazuto.receiper.ui.Recipe.RecipeScreen
 
-class CameraScreen(): Screen {
+class CameraScreen : Screen {
     @Composable
     override fun Content() {
         val scrennModel = getScreenModel<CameraScreenModel>()

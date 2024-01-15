@@ -12,7 +12,7 @@ import org.koin.dsl.module
 import org.koin.mp.KoinPlatform
 
 @Composable
-public inline fun <reified T : ScreenModel> Screen.getScreenModel(
+inline fun <reified T : ScreenModel> Screen.getScreenModel(
     qualifier: Qualifier? = null,
     noinline parameters: ParametersDefinition? = null
 ): T {

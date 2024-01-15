@@ -17,7 +17,7 @@ import org.kakazuto.receiper.ui.Camera.CameraScreen
 import org.kakazuto.receiper.ui.Common.Composable.CircularButton
 
 
-class RecipeScreen(): Screen {
+class RecipeScreen : Screen {
     @Composable
     override fun Content() {
         val screenModel = getScreenModel<RecipeScreenModel>()

@@ -1,13 +1,12 @@
 package org.kakazuto.receiper.ui.Camera
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import kotlinx.coroutines.launch
 import org.kakazuto.receiper.net.ReceiptApi
 import org.kakazuto.receiper.utils.PlatformStorableImage
 import org.kakazuto.receiper.utils.convertPlatformImageToByteArray
 import org.kakazuto.receiper.utils.getUUID
-import org.kakazuto.receiper.utils.settings
 
 class CameraScreenModel(
     private val receiptApi: ReceiptApi
@@ -16,7 +15,7 @@ class CameraScreenModel(
     }
 
     fun onCapture(image: PlatformStorableImage) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             kotlin.runCatching {
                 SendToSupabase(convertPlatformImageToByteArray(image))
             }
@@ -24,7 +23,7 @@ class CameraScreenModel(
     }
 
     fun SendToSupabase(receipt: ByteArray) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             kotlin.runCatching {
                 receiptApi.uploadReceipt(getUUID()!!, receipt )
             }

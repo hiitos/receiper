@@ -18,7 +18,7 @@ internal class UserApiImpl(
     override suspend fun makeUser(
         name: String,
         email: String
-    ): Int? {
+    ): Int {
         val user = User
         // create random int
         val userId = Random.nextInt(10000)

@@ -17,7 +17,7 @@ internal class ReceiptApiImpl(
     private val table = client.postgrest["receipt"]
 
 
-    override suspend fun uploadReceipt(userId: Int, receipt: ByteArray): String? {
+    override suspend fun uploadReceipt(userId: Int, receipt: ByteArray): String {
         val path = "${userId}/${createUUID()}.jpg"
         val bucket = client.storage["receipts"]
         // add error handling and logging
