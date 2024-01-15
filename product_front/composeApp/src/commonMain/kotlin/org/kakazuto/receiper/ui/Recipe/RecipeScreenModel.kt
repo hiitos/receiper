@@ -23,7 +23,6 @@ import org.kakazuto.receiper.utils.settings
 class RecipeScreenModel(
     private val recipeApi: RecipeApi,
     private val userApi: UserApi,
-    private val receiptApi: ReceiptApi
 ): ScreenModel {
     private val _recipe = mutableStateOf<Recipe?>(null)
     val recipe: State<Recipe?> = _recipe
@@ -44,7 +43,6 @@ class RecipeScreenModel(
                     email = "test@test.com"
                 ))
             }.onSuccess {
-                receiptApi.createBucket(getUUID()!!)
             }.onFailure {
                 it.printStackTrace()
             }

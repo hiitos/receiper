@@ -7,7 +7,6 @@ import io.github.jan.supabase.storage.storage
 import org.kakazuto.receiper.utils.createUUID
 
 interface ReceiptApi {
-    suspend fun createBucket(userId: Int)
     suspend fun uploadReceipt(userId: Int, receipt: ByteArray): String?
     suspend fun setPathOnDB(userId: Int, path: String)
 }
@@ -17,12 +16,6 @@ internal class ReceiptApiImpl(
 ): ReceiptApi {
     private val table = client.postgrest["receipt"]
 
-    override suspend fun createBucket(userId: Int) {
-        client.storage.createBucket(userId.toString()) {
-            public = true
-            fileSizeLimit = 30.megabytes
-        }
-    }
 
     override suspend fun uploadReceipt(userId: Int, receipt: ByteArray): String? {
 //        storage
