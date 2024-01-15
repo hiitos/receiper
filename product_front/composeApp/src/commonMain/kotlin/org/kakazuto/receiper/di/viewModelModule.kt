@@ -3,8 +3,6 @@ package org.kakazuto.receiper.di
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.concurrent.PlatformMainDispatcher
-import cafe.adriel.voyager.core.lifecycle.ScreenLifecycleStore
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import org.kakazuto.receiper.ui.Camera.CameraScreenModel
 import org.kakazuto.receiper.ui.Recipe.RecipeScreenModel
@@ -28,11 +26,11 @@ public inline fun <reified T : ScreenModel> Screen.getScreenModel(
 val viewModel = module {
     // ListScreenModelのインスタンスを生成するためのファクトリを定義
     factory {
-        CameraScreenModel()
+        CameraScreenModel(get())
     }
     // LoginScreenModelのインスタンスを生成するためのファクトリを定義
     factory {
-        RecipeScreenModel(get(),get(),get())
+        RecipeScreenModel(get(),get())
     }
 
 //    factory {

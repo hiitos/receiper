@@ -21,7 +21,7 @@ class CameraScreen(): Screen {
         CameraView(
             modifier = Modifier.fillMaxSize(),
             onCapture = { image ->
-//                scrennModel.onCapture(image)
+                scrennModel.onCapture(image)
                 navigator.push(RecipeScreen())
             })
     }
