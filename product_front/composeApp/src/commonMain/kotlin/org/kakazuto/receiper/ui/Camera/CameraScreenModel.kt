@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import org.kakazuto.receiper.net.ReceiptApi
 import org.kakazuto.receiper.utils.PlatformStorableImage
 import org.kakazuto.receiper.utils.convertPlatformImageToByteArray
-import org.kakazuto.receiper.utils.getUUID
+import org.kakazuto.receiper.utils.getUserId
 
 class CameraScreenModel(
     private val receiptApi: ReceiptApi
@@ -25,7 +25,11 @@ class CameraScreenModel(
     fun SendToSupabase(receipt: ByteArray) {
         screenModelScope.launch {
             kotlin.runCatching {
-                receiptApi.uploadReceipt(getUUID()!!, receipt )
+                receiptApi.uploadReceipt(getUserId()!!, receipt )
+            }.onSuccess {
+                receiptApi.setPathOnDB(getUserId()!!, it!!)
+            }.onFailure {
+                it.printStackTrace()
             }
         }
     }

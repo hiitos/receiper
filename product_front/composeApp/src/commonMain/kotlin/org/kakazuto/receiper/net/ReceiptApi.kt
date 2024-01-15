@@ -4,6 +4,7 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
+import org.kakazuto.receiper.model.Receipt
 import org.kakazuto.receiper.utils.createUUID
 
 interface ReceiptApi {
@@ -14,7 +15,7 @@ interface ReceiptApi {
 internal class ReceiptApiImpl(
     private val client : SupabaseClient
 ): ReceiptApi {
-    private val table = client.postgrest["receipt"]
+    private val table = client.postgrest["receipt_dev"]
 
 
     override suspend fun uploadReceipt(userId: Int, receipt: ByteArray): String {
@@ -27,14 +28,11 @@ internal class ReceiptApiImpl(
             e.printStackTrace()
         }
 
-       return userId.toString() + path
+       return path
     }
 
     override suspend fun setPathOnDB(userId: Int, path:String) {
-//        table.update({
-//            Receipt::path setTo path
-//        }) {
-//            Receipt::user_id eq userId
-//        }
+        table.insert(Receipt(userId, path), upsert = false)
     }
+
 }
