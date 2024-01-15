@@ -12,11 +12,11 @@ expect val ioDispatcher: CoroutineDispatcher
 expect val isShareFeatureSupported: Boolean
 
 val settings: Settings = Settings()
-fun getUUID(): Int? {
+fun getUserId(): Int? {
     return settings.getIntOrNull("uuid")
 }
 
-fun setUUID(uuid: Int?) {
+fun setUserId(uuid: Int?) {
     settings.putInt("uuid", uuid ?: 0)
 }
 

@@ -9,8 +9,8 @@ import org.kakazuto.receiper.getPlatformName
 import org.kakazuto.receiper.model.Recipe
 import org.kakazuto.receiper.net.RecipeApi
 import org.kakazuto.receiper.net.UserApi
-import org.kakazuto.receiper.utils.getUUID
-import org.kakazuto.receiper.utils.setUUID
+import org.kakazuto.receiper.utils.getUserId
+import org.kakazuto.receiper.utils.setUserId
 
 class RecipeScreenModel(
     private val recipeApi: RecipeApi,
@@ -20,7 +20,7 @@ class RecipeScreenModel(
     val recipe: State<Recipe?> = _recipe
 
     init {
-        if (getUUID() == null) {
+        if (getUserId() == null) {
             userRegistration()
         } else {
             fetchRecipe()
@@ -30,7 +30,7 @@ class RecipeScreenModel(
     fun userRegistration() {
         screenModelScope.launch {
             kotlin.runCatching {
-                setUUID(userApi.makeUser(
+                setUserId(userApi.makeUser(
                     name= getPlatformName(),
                     email = "test@test.com"
                 ))
@@ -43,7 +43,7 @@ class RecipeScreenModel(
     fun fetchRecipe() {
         screenModelScope.launch {
             kotlin.runCatching {
-                recipeApi.fetchTheLatest(getUUID()!!)
+                recipeApi.fetchTheLatest(getUserId()!!)
             }.onSuccess {
                 _recipe.value = it
             }.onFailure {
