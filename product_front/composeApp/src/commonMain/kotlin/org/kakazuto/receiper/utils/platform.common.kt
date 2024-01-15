@@ -19,3 +19,5 @@ fun getUUID(): Int? {
 fun setUUID(uuid: Int?) {
     settings.putInt("uuid", uuid ?: 0)
 }
+
+expect fun convertPlatformImageToByteArray(image: PlatformStorableImage): ByteArray
