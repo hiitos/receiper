@@ -18,10 +18,16 @@ internal class ReceiptApiImpl(
 
 
     override suspend fun uploadReceipt(userId: Int, receipt: ByteArray): String? {
-//        storage
-//        val receiptId = createUUID()
-//        val result = table.insert(Receipt(receiptId, userId, receipt)).decodeSingle<Receipt>()
-        return ""
+        val path = "${userId}/${createUUID()}.jpg"
+        val bucket = client.storage["receipts"]
+        // add error handling and logging
+        try {
+            bucket.upload(path, receipt)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+       return userId.toString() + path
     }
 
     override suspend fun setPathOnDB(userId: Int, path:String) {
