@@ -16,7 +16,6 @@ import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCAction
 import org.jetbrains.skia.Image
-import org.kakazuto.receiper.model.PictureData
 import org.kakazuto.receiper.ui.Common.Composable.CircularButton
 import org.kakazuto.receiper.ui.Common.Icon.IconCustomArrowBack
 import org.kakazuto.receiper.utils.IosStorableImage
@@ -25,8 +24,6 @@ import platform.AVFoundation.*
 import platform.AVFoundation.AVCaptureDeviceDiscoverySession.Companion.discoverySessionWithDeviceTypes
 import platform.AVFoundation.AVCaptureDeviceInput.Companion.deviceInputWithDevice
 import platform.CoreGraphics.CGRect
-import platform.CoreLocation.CLLocationManager
-import platform.CoreLocation.kCLLocationAccuracyBest
 import platform.Foundation.NSError
 import platform.Foundation.NSNotification
 import platform.Foundation.NSNotificationCenter
@@ -132,12 +129,6 @@ private fun BoxScope.RealDeviceCamera(
         mutableStateOf(
             AVCaptureVideoOrientationPortrait
         )
-    }
-    val locationManager = remember {
-        CLLocationManager().apply {
-            desiredAccuracy = kCLLocationAccuracyBest
-            requestWhenInUseAuthorization()
-        }
     }
     var capturePhotoStarted by remember { mutableStateOf(false) }
     val photoCaptureDelegate = remember {
