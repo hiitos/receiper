@@ -106,7 +106,7 @@ private fun BoxScope.AuthorizedCamera(
         discoverySessionWithDeviceTypes(
             deviceTypes = deviceTypes,
             mediaType = AVMediaTypeVideo,
-            position = AVCaptureDevicePositionFront,
+            position = AVCaptureDevicePositionBack,
         ).devices.firstOrNull() as? AVCaptureDevice
     }
     if (camera != null) {
