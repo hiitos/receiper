@@ -1,35 +1,60 @@
 import { supabaseClient } from "./supabase_service.ts";
 import { documentaiClient, projectId, location } from "./gcp_service.ts";
 
-// Supabase Realtimeのセットアップ
-const receiptSubscription = supabaseClient
-  .from('receipt')
-  .on('INSERT', async (payload) => {
-    console.log('New receipt added:', payload.new);
 
-    const imagePath = payload.new.image_path;
+// functions
+Deno.serve(async (req: Request) => {
+  console.log('____ Edge Functions ____');
+  // console.log(req);
+  
+  // リクエストボディの解析
+  const data = await req.json();
+  // console.log('Received data:', data);
+  // リクエストの中からimage_pathを取得
+  const image_path = data.record.image_path;
+  console.log('image_path:', image_path);
+  
+  // Supabase Storageのバケット一覧を取得
+  const { data: listBuckets, listBuckets_e} = await supabaseClient.storage.listBuckets()
+  console.log('listBuckets:', listBuckets);
 
-    // Supabaseから画像を取得
-    const { data: imageBlob, error: supabaseError } = await supabaseClient
-      .storage
-      .from('your-bucket-name')
-      .download(imagePath);
-    if (supabaseError) {
-      throw supabaseError;
-    }
+  const uid = data.record.user_id;
+  const { data: getBuckets, getBuckets_error } = await supabaseClient.storage.getBucket('receipts');
+  console.log('getBuckets:', getBuckets);
 
-    // 画像データをバッファに変換
-    const imageBuffer = await imageBlob.arrayBuffer();
+  // supabase Storageの画像を取得
+  const { data: image, error } = await supabaseClient.storage.from('receipts').download(image_path);
+  
+  console.log('image:', image);
+  // imageがとれているか確認
+  if (error) {
+    console.log('error:', error);
+    console.log('error:', error.message);
+  }
 
-    // 画像をDocument AIに送信
-    const [result] = await documentaiClient.processDocument({
-      parent: `projects/${projectId}/locations/${location}`,
-      document: {
-        content: imageBuffer,
-        mimeType: 'image/jpeg' // 画像の形式に応じて変更
-      }
-    });
+  // imageをDocumentAIに渡して、OCRを実行
+  const [result] = await documentaiClient.processDocument({
+    name: `projects/${projectId}/locations/${location}/processors/xxxxx`,
+    document: {
+      content: image,
+      mimeType: 'image/jpeg',
+    },
+  });
+  console.log('result:', result);
+  
+  // OCRの結果からLLMを実行
+  
 
-    console.log('Document AI Result:', result);
-  })
-  .subscribe();
+
+  try {
+    return new Response(JSON.stringify({ result: 'Edge Functions OK' }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 200,
+    })
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 500,
+    })
+  }
+})
