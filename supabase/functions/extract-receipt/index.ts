@@ -1,49 +1,41 @@
 import { supabaseClient } from "./supabase_service.ts";
-import { documentaiClient, projectId, location } from "./gcp_service.ts";
+// import { documentaiClient, projectId, location } from "./gcp_service.ts";
 
 
-// functions
 Deno.serve(async (req: Request) => {
   console.log('____ Edge Functions ____');
   // console.log(req);
   
-  // リクエストボディの解析
+  // _________ リクエストボディからuidとimage_pathを取得する _________
   const data = await req.json();
   // console.log('Received data:', data);
-  // リクエストの中からimage_pathを取得
-  const image_path = data.record.image_path;
-  console.log('image_path:', image_path);
-  
-  // Supabase Storageのバケット一覧を取得
-  const { data: listBuckets, listBuckets_e} = await supabaseClient.storage.listBuckets()
-  console.log('listBuckets:', listBuckets);
-
   const uid = data.record.user_id;
-  const { data: getBuckets, getBuckets_error } = await supabaseClient.storage.getBucket('receipts');
-  console.log('getBuckets:', getBuckets);
+  const image_path = data.record.image_path;
+  console.log('uid:', uid);
+  console.log('image_path:', image_path);
 
-  // supabase Storageの画像を取得
+  // _________ supabase Storageから画像を取得する _________
   const { data: image, error } = await supabaseClient.storage.from('receipts').download(image_path);
   
-  console.log('image:', image);
   // imageがとれているか確認
   if (error) {
-    console.log('error:', error);
     console.log('error:', error.message);
+  } else {
+    console.log('image:', image);
+    console.log('image type:', typeof image);
   }
 
+  // Base64でエンコードする
+  // BlobをUint8Arrayに変換してからBase64エンコード
+  const arrayBuffer = await image.arrayBuffer(); // imageはBlob型
+  const uint8Array = new Uint8Array(arrayBuffer);
+  const base64Image = uint8ArrayToBase64(uint8Array);
+  console.log('base64Image:', base64Image);
+
   // imageをDocumentAIに渡して、OCRを実行
-  const [result] = await documentaiClient.processDocument({
-    name: `projects/${projectId}/locations/${location}/processors/xxxxx`,
-    document: {
-      content: image,
-      mimeType: 'image/jpeg',
-    },
-  });
-  console.log('result:', result);
+
   
   // OCRの結果からLLMを実行
-  
 
 
   try {
@@ -58,3 +50,13 @@ Deno.serve(async (req: Request) => {
     })
   }
 })
+
+// Uint8ArrayデータをBase64文字列に変換する関数
+function uint8ArrayToBase64(data: Uint8Array): string {
+  let binary = '';
+  const len = data.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(data[i]);
+  }
+  return btoa(binary);
+}
