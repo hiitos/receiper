@@ -1,40 +1,39 @@
-import { DocumentProcessorServiceClient } from '@google-cloud/documentai';
 
 
-const projectId = Deno.env.get('GCP_PROJECT_ID') ?? '';
-const location = Deno.env.get('GCP_LOCATION') ?? '';
-const processorId = Deno.env.get('PROCESSOR_ID') ?? '';
-const name = `projects/${projectId}/locations/${location}/processors/${processorId}`;
 
-// Process a single document
-export async function processDocument(encodedImage: string): Promise<void> {
-    // Instantiates a client
-    const client = new DocumentProcessorServiceClient();
+export async function processDocument(accessToken: string, encodedImage: string): Promise<void> {
+  const endpoint = Deno.env.get('GCP_ENDPOINT') ?? '';
+  // エンドポイントが設定されていることを確認
+  if (!endpoint) {
+    console.error('GCP_ENDPOINT is not set.');
+    return null;
+  } else {
+    console.log('GCP_ENDPOINT:', endpoint);
+  }
 
-    try {
-        const request = {
-            name,
-            rawDocument: {
-                content: encodedImage,
-                // mimeType: 'application/pdf',
-                mimeType: 'image/jpeg',
-            },
-        };
-  
-        const [result] = await client.processDocument(request);
-        console.log('Document processing complete.');
-        const { document } = result;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      document: {
+        content: encodedImage,
+        mimeType: 'image/jpeg'
+      }
+    }),
+  });
 
-        if (document?.text) {
-            console.log(`Full document text: ${JSON.stringify(document.text)}`);
-            return document.text;
-        } else {
-            console.log("No text found in document.");
-            return null;
-        }
+  if (response.ok) {
+    const data = await response.json();
+    console.log('Document processing complete:', data);
+    // 処理結果を利用
+    return data;
+  } else {
+    const error = await response.text();
+    console.error('Failed to process document:', error);
+    return null;
+  }
 
-    } catch (error) {
-        console.error("Failed to process document:", error);
-        return null;
-    }
 }

@@ -1,5 +1,6 @@
 import { supabaseClient } from "./supabase_service.ts";
-// import { documentaiClient, projectId, location } from "./gcp_service.ts";
+import { processDocument } from "./gcp_service.ts";
+import { uint8ArrayToBase64 } from "./utils.ts";
 
 
 Deno.serve(async (req: Request) => {
@@ -14,49 +15,63 @@ Deno.serve(async (req: Request) => {
   console.log('uid:', uid);
   console.log('image_path:', image_path);
 
-  // _________ supabase Storageから画像を取得する _________
+  // __________________ supabase Storageから画像を取得する __________________
   const { data: image, error } = await supabaseClient.storage.from('receipts').download(image_path);
   
   // imageがとれているか確認
   if (error) {
-    console.log('error:', error.message);
+    console.error('Error downloading image:', error.message);
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 500,
+    });
   } else {
     console.log('image:', image);
     console.log('image type:', typeof image);
   }
 
-  // Base64でエンコードする
-  // BlobをUint8Arrayに変換してからBase64エンコード
+  // __________________ Base64でエンコードする __________________
+  //BlobをUint8Arrayに変換してからBase64エンコード
   const arrayBuffer = await image.arrayBuffer(); // imageはBlob型
   const uint8Array = new Uint8Array(arrayBuffer);
   const base64Image = uint8ArrayToBase64(uint8Array);
   console.log('base64Image:', base64Image);
 
-  // imageをDocumentAIに渡して、OCRを実行
+  // __________________ OCRを実行 __________________
+  // GCPのaccessTokenを取得しないといけない
+  const accessToken = '<GCPアクセトークン>'
 
-  
-  // OCRの結果からLLMを実行
-
-
+  // DocumentAIに画像を渡してOCRを実行
   try {
-    return new Response(JSON.stringify({ result: 'Edge Functions OK' }), {
+    // GCP Document AIを使用してOCRを実行
+    const ocrResult = await processDocument(accessToken, base64Image);
+    console.log('OCR result:', ocrResult);
+
+    // OCRの結果をレスポンスとして返す（またはLLMへの入力として使用する）
+    return new Response(JSON.stringify({ result: 'OCR processing complete', ocrResult }), {
       headers: { 'Content-Type': 'application/json' },
       status: 200,
-    })
+    });
   } catch (error) {
+    console.error("Failed to process document with OCR:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { 'Content-Type': 'application/json' },
       status: 500,
-    })
+    });
   }
-})
+  
+  // __________________ OCRの結果からLLMを実行 __________________
 
-// Uint8ArrayデータをBase64文字列に変換する関数
-function uint8ArrayToBase64(data: Uint8Array): string {
-  let binary = '';
-  const len = data.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(data[i]);
-  }
-  return btoa(binary);
-}
+
+  // try {
+  //   return new Response(JSON.stringify({ result: 'Edge Functions OK' }), {
+  //     headers: { 'Content-Type': 'application/json' },
+  //     status: 200,
+  //   })
+  // } catch (error) {
+  //   return new Response(JSON.stringify({ error: error.message }), {
+  //     headers: { 'Content-Type': 'application/json' },
+  //     status: 500,
+  //   })
+  // }
+});
