@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  # __________________ Event Triger Functions __________________
+  webhook-functions:
+    build:
+      context: .
+      dockerfile: docker/webhook-functions/Dockerfile
+    container_name: webhook-functions
+    volumes:
+      - ./webhook/functions:/workspace
+      - ./credentials:/credentials
+    networks:
+      - main-network
+    ports:
+      - 5001:5001
+    env_file: .env
+    environment:
+      - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+      - GOOGLE_APPLICATION_CREDENTIALS=../credentials/receiper-document-ai-creds.json
+    tty: true
+    command: functions-framework --target=handle_request --signature-type=http --debug --port 5001  
+
+networks:
+  main-network:
+    driver: bridge
