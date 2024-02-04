@@ -1,5 +1,5 @@
 import { supabaseClient } from "./supabase_service.ts";
-import { processDocument } from "./gcp_service.ts";
+import { processDocument, getAccessToken } from "./gcp_service.ts";
 import { uint8ArrayToBase64 } from "./utils.ts";
 
 
@@ -39,7 +39,17 @@ Deno.serve(async (req: Request) => {
 
   // __________________ OCRを実行 __________________
   // GCPのaccessTokenを取得しないといけない
-  const accessToken = '<GCPアクセトークン>'
+  // try {
+  //   const accessToken = await getAccessToken(); // アクセストークンを取得
+  //   console.log('accessToken:', accessToken);
+  // } catch (error) {
+  //   console.error('Failed to get access token:', error);
+  //   return new Response(JSON.stringify({ error: error.message }), {
+  //     headers: { 'Content-Type': 'application/json' },
+  //     status: 500,
+  //   });
+  // }
+  const accessToken = Deno.env.get('GCP_ACCESS_TOKEN');
 
   // DocumentAIに画像を渡してOCRを実行
   try {
